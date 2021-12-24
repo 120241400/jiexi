@@ -1,163 +1,86 @@
-﻿<!DOCTYPE html>
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-<!--
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★　　　　　　　★★★★★★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　　　★★★★★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　　　★★★★★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　　　　★★★★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　　　　　★★★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　　　　　★★★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　　　　　　★★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　　　　　　　★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　　　　　　　★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　★　　　　　　★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　★　　　　　　★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　★★　　　　　　★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　★★　　　　　　　★★★★★★★★★　　　　　　★★★★
-★★　　　　　　★★★　　　　　　★★★★★★★★★　　　　　　★★★★
-★★　　　　　　★★★★　　　　　　★★★★★★★★　　　　　　★★★★
-★★　　　　　　★★★★　　　　　　　★★★★★★★　　　　　　★★★★
-★★　　　　　　★★★★★　　　　　　★★★★★★★　　　　　　★★★★
-★★　　　　　　★★★★★★　　　　　　★★★★★★　　　　　　★★★★
-★★　　　　　　★★★★★★　　　　　　★★★★★★　　　　　　★★★★
-★★　　　　　　★★★★★★★　　　　　　★★★★★　　　　　　★★★★
-★★　　　　　　★★★★★★★　　　　　　　★★★★　　　　　　★★★★
-★★　　　　　　★★★★★★★★　　　　　　★★★★　　　　　　★★★★
-★★　　　　　　★★★★★★★★★　　　　　　★★★　　　　　　★★★★
-★★　　　　　　★★★★★★★★★　　　　　　　★★　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★　　　　　　★★　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★　　　　　　★　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★　　　　　　★　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★　　　　　　　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★★　　　　　　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★★　　　　　　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★★★　　　　　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★★★　　　　　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★★★★　　　　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★★★★★　　　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★★★★★　　　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★★★★★★　　　　　　　★★★★
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★★★★★★★　　　　　　　　　　★★★★★★★★★★★★★★
-★★★★★★★★★　　　　　　　　　　　　　　　　★★★★★★★★★★★
-★★★★★★★　　　　　　　　　　　　　　　　　　　★★★★★★★★★★
-★★★★★★　　　　　　　　　　　　　　　　　　　　　　★★★★★★★★
-★★★★★　　　　　　　　　　　　　　　　　　　　　　　　★★★★★★★
-★★★★　　　　　　　　★★★★★★★★★　　　　　　　　　★★★★★★
-★★★　　　　　　　★★★★★★★★★★★★★　　　　　　　★★★★★★
-★★★　　　　　　★★★★★★★★★★★★★★★　　　　　　　★★★★★
-★★　　　　　　　★★★★★★★★★★★★★★★★　　　　　　★★★★★
-★★　　　　　　★★★★★★★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　★★★★★★★★★★★★★★★★★★★　　　　　　★★★★
-★　　　　　　★★★★★★★★★★★★★★★★★★★★　　　　　★★★★
-★　　　　　　★★★★★★★★★★★★★★★★★★★★　　　　　　★★★
-★　　　　　★★★★★★★★★★★★★★★★★★★★★　　　　　　★★★
-★　　　　　★★★★★★★★★★★★★★★★★★★★★★　　　　　★★★
-★　　　　　★★★★★★★★★★★★★★★★★★★★★★　　　　　★★★
-　　　　　　★★★★★★★★★★★★★★★★★★★★★★　　　　　★★★
-　　　　　　★★★★★★★★★★★★★★★★★★★★★★　　　　　★★★
-　　　　　　★★★★★★★★★★★★★★★★★★★★★★　　　　　★★★
-★　　　　　★★★★★★★★★★★★★★★★★★★★★★　　　　　★★★
-★　　　　　★★★★★★★★★★★★★★★★★★★★★★　　　　　★★★
-★　　　　　★★★★★★★★★★★★★★★★★★★★★　　　　　　★★★
-★　　　　　　★★★★★★★★★★★★★★★★★★★★　　　　　　★★★
-★　　　　　　★★★★★★★★★★★★★★★★★★★★　　　　　★★★★
-★★　　　　　★★★★★★★★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★★★★★★★　　　　　　★★★★
-★★　　　　　　★★★★★★★★★★★★★★★★★　　　　　　★★★★★
-★★★　　　　　　★★★★★★★★★★★★★★★　　　　　　　★★★★★
-★★★★　　　　　　★★★★★★★★★★★★★　　　　　　　★★★★★★
-★★★★　　　　　　　　★★★★★★★★★★　　　　　　　★★★★★★★
-★★★★★　　　　　　　　　　　　　　　　　　　　　　　　★★★★★★★
-★★★★★★　　　　　　　　　　　　　　　　　　　　　★★★★★★★★★
-★★★★★★★★　　　　　　　　　　　　　　　　　　★★★★★★★★★★
-★★★★★★★★★★　　　　　　　　　　　　　　★★★★★★★★★★★★
-★★★★★★★★★★★★★　　　　　　　　★★★★★★★★★★★★★★★
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★★　★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★　　　　★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★　　　　　★★★★★★　　　　　　　　　　　　　　　★★★★
-★★★★★　　　　　★★★★★★★　　　　　　　　　　　　　　　★★★★
-★★★★★　　　　　　　　　　　★　　　　　　　　　　　　　　　★★★★
-★★★★　　　　　　　　　　　　★　　　　　　　　　　　　　　　★★★★
-★★★　　　　　　　　　　　　★★★★★★　　　★★★★　　　　★★★★
-★★★　　　　★★★★　　　★★★★★★★　　　★★★★　　　★★★★★
-★★　　　　★★★★　　　　★★★★★★★　　　★★★★　　　★★★★★
-★　　　　　　　　　　　　　　　　　★★　　　　★★★　　　　★★★★★
-　　　　　　　　　　　　　　　　　　★　　　　★　　　　　　　★★★★★
-★　　　　　　　　　　　　　　　　　　　　　★★★　　　　　　★★★★★
-★★　★　　　　　　　　　　　　　　　　　　★★★　　　　　★★★★★★
-★★★★　　　★★　　　★★　　　★　　　★★★★　　　★★★★★★★★
-★★★★　　　★★　　　★★　　　★★★　★★★　　　　★★★★★★★★
-★★★★　　　　　　　　　　　　　★★　　　　　　　　　★★★★★★★★
-★★★★　　　　　　　　　　　　　★★　　　　★　　　　★★★★★★★★
-★★★★　　　　　　　　　　　　　★★　　　　　　　　　　　　　　★★★
-★★★★　　　★★　　　★★　　　★★　　　　　　　　　　　　　　★★★
-★★★★　　　★★　　　★★　　　★　　　　　　　　　　　　　　　★★★
-★★★　　　　★★　　　★★　　　★　　　★★★　　　　★★★★★★★★
-★★★　　　　　　　　　　　　　　★　　　★★★　　　　★★★★★★★★
-★★★　　　　　　　　　　　　　　★★　　★★★　　　　★★★★★★★★
-★★★　　　　★★　　　★★　　　　　　　　　　　　　　　　　　　　★★
-★★★　　　　★★　　　★★　　　　　　　　　　　　　　　　　　　　★★
-★★★　　　★★★　　　★★　　　★　　　　　　　　　　　　　　　　★★
-★★★　　　★★★　　　★★　　　★★★★★★★　　　　★★★★★★★★
-★★　　　　★★★　　　★★　　　★★★★★★★　　　　★★★★★★★★
-★★　　　　★★★　　　　　　　　★★★★★★★　　　　★★★★★★★★
-★　　　　★★★★　　　　　　　　★★★★★★★　　　　★★★★★★★★
-★　　　　★★★★★★★　　　　　★★★★★★★　　　　★★★★★★★★
-★★　　★★★★★★★★　　　　★★★★★★★★　　　　★★★★★★★★
-★★★　★★★★★★★★★★★★★★★★★★★★　　　　★★★★★★★★
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★★　　　　★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★★　　　　★★★★★★★★★★★★★★★★★　　　★★★★★
-★★★★★★★　　　★★★★★★★★★★★★★　　　　　　　　★★★★★
-★★★★★★★　　　★★★★★★　　　　　　　　　　　　　　　　★★★★
-★★★★★★★　　　★★★★★★　　　　　　　　　　　　　　　　★★★★
-★★★★★★★　　　★★★★★★　　　　　　　　　　　★★★★★★★★★
-★★★★★★★　　　★★★★★★★　　　★★★★★★★★★★★★★★★★
-★　　　　　　　　　　　　　　★★　　　★★★★★★★★★★★★★★★★
-★　　　　　　　　　　　　　　★★　　　★★★★★★★★★★★★★★★★
-★　　　　　　　　　　　　　　★★　　　★★★★★★★★★★★★★★★★
-★　　　　　　　　　　　　　　★★　　　★★★★★★★★★★★★★★★★
-★★★★★★　　　　★★★★★★★　　　　　　　　　　　　　　　　★★★
-★★★★★　　　　　★★★★★★★　　　　　　　　　　　　　　　　★★★
-★★★★★　　　　　★★★★★★★　　　　　　　　　　　　　　　　★★★
-★★★★★　　　　　　　　★★★★　　　★★★★★　　　★★★　　★★★
-★★★★　　　　　　　　　　★★　　　　★★★★★　　　★★★★★★★★
-★★★★　　　　　　　　　　　★　　　　★★★★★　　　★★★★★★★★
-★★★　　　　　　　★　　　　★　　　　★★★★★　　　★★★★★★★★
-★★★　　　★　　　★　　　　　　　　　★★★★★　　　★★★★★★★★
-★★　　　　★　　　★★　　　　　　　　★★★★★　　　★★★★★★★★
-★　　　　　★　　　★★　　★★　　　　★★★★★　　　★★★★★★★★
-★　　　　★★　　　★★★★★★　　　　★★★★★　　　★★★★★★★★
-　　　　　★★　　　★★★★★★　　　　★★★★★　　　★★★★★★★★
-★　　　★★★　　　★★★★★　　　　★★★★★★　　　★★★★★★★★
-★★　★★★★　　　★★★★★　　　　★★★★★★　　　★★★★★★★★
-★★★★★★★　　　★★★★　　　　　★★★★★★　　　★★★★★★★★
-★★★★★★★　　　★★★★　　　　★★★★★★★　　　★★★★★★★★
-★★★★★★★　　　★★★　　　　　★★★★★★★　　　★★★★★★★★
-★★★★★★★　　　★★　　　　　★★★★★★★　　　　★★★★★★★★
-★★★★★★　　　　★　　　　　　★★★★★★★　　　　★★★★★★★★
-★★★★★★　　　　★★　　　　★★★★★★★★　　　　★★★★★★★★
-★★★★★★　　　　★★★★　★★★★★★★★★　　　　★★★★★★★★
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
- -->
-		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-		name="viewport" />
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>NO解析</title>
-		<meta name="keywords" content="NO免费解析">
-		<meta name="description" content="NO免费解析">
-        <link rel="shortcut icon" href="https://p16.qhimg.com/t01a0a7d88ffa654cfe.png" />
-<script type="text/javascript" src="/index.js"></script></div>
-<script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1280705435'%3E%3C/span%3E%3Cscript src='https://v1.cnzz.com/z_stat.php%3Fid%3D1280705435' type='text/javascript'%3E%3C/script%3E"));</script>	
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>NO解析</title>
+<meta name="keywords" content="NO解析" />
+<meta name="Description" content="NO解析" />
+</head>
+
+<link rel="stylesheet" type="text/css" href="base.css" />
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery.easing.js"></script>
+<script type="text/javascript" src="base.js"></script>
+<style type="text/css">
+	.yqlj div{
+		line-height:25px;
+		padding:5px 55px;
+	}
+	.footer{
+		width:100%;
+		text-align:center;
+		}
+	.footer li{
+		width:100%;
+		line-height:26px;
+		list-style:none;
+		
+		}
+</style>
+<body>
+<div style="height:160px;">
+	<div style="width:70%;height:100px;margin-top:20px;text-align:left;margin-left:110px;"><img src="images/logo.png" /></div>
+</div>
+<div class="s-mod w1100" style="height:310px">
+	<div class="s-mod-loding"><img src="images/loading_d.gif"></div>
+	<ul>
+    		<a href="tencent://Message/?Menu=YES&Uin=10000000&websiteName=im.qq.com" target="_blank"><li class="s-mod-item" w="266" h="266" l="0" t="0" bg="#fb48a5" cbg="#f91e90">
+		<div class="s-mod-wrap">
+				<div class="s-mod-def"><span>联系我们</span></div>
+				<div class="s-mod-cur"><span>QQ：10000000</span></div>
+		</li></a>
+        		<a href="https://nojx.cc/?url=https://v.youku.com/v_show/id_XMTM0NzA1MDU5Mg==.html" target="_blank"><li class="s-mod-item" w="227" h="127" l="278" t="0" bg="#1CA1E2" cbg="#1182BA">
+			<div class="s-mod-wrap">
+				<div class="s-mod-def"><span>优酷测试</span></div>
+				<div class="s-mod-cur"><span>点击打开</span></div>
+		</li></a>
+		<a href="https://nojx.cc/?url=https://v.qq.com/x/cover/z6j3ixjjcokafyc.html" target="_blank"><li class="s-mod-item" w="305" h="127" l="517" t="0" bg="#aa5096" cbg="#922a7b">
+			<div class="s-mod-wrap">
+				<div class="s-mod-def"><span>腾讯测试</span></div>
+				<div class="s-mod-cur"><span>点击打开</span></div>
+		</li></a>
+       <a href="https://nojx.cc/?url=https://www.iqiyi.com/v_19rv0wokzo.html?" target="_blank"> <li class="s-mod-item" w="305" h="127" l="278" t="139" bg="#6ad62f" cbg="#54ce11">
+			<div class="s-mod-wrap">
+				<div class="s-mod-def"><span>爱奇艺测试</span></div>
+				<div class="s-mod-cur"><span>点击打开</span></div>
+		</li></a>
+		<a href="https://nojx.cc/?url=https://www.mgtv.com/b/336910/10185125.html" target="_blank"><li class="s-mod-item" w="227" h="127" l="595" t="139" bg="#FFD302" cbg="#EAC203">
+			<div class="s-mod-wrap">
+				<div class="s-mod-def"><span>芒果测试</span></div>
+				<div class="s-mod-cur"><span>点击打开</span></div>
+			</div>
+		</li></a>
+      <a href="https://waptv.sogou.com/list?listTab=teleplay" target="_blank">  <li class="s-mod-item" w="266" h="266" l="835" t="0" bg="#e8443a" cbg="#d92e24">
+			<div class="s-mod-wrap">
+				<div class="s-mod-def"><span>功能待开发</span></div>
+				<div class="s-mod-cur"><span>功能待开发</span></div>
+			</div>
+		</li></a>
+	</ul>
+</div>
+<div style="width:100%; margin:0px;padding:0px;border-top:1px solid #eee;margin-top:20px;">
+	<div class="yqlj">
+<h3>
+    	<div>
+        <a href="http://sogou.com">忘情网络科技 </a> | </div>
+    </div></h3>
+    <div class="footer" style="padding-bottom:30px;">
+<li>About NetEase　-　<a href="#" target="_blank">关于我们</a>　-　<a href="#" target="_blank">招商加盟</a>　-　<a href="#" target="_blank">联系我们</a>　-　<a href="#" target="_blank">版权声明</a></li>
+<li>Copyright©20020-2025 忘情网络科技 All rights reserved.</li>
+<li>联系电话：123456789 QQ:123456789 邮箱：123456789@qq.com 京ICP备123456789号</li>
+<li>未经过本站允许,请勿将本站内容传播或复制 </li>
+    </div>
+</div>
 </body>
 </html>
