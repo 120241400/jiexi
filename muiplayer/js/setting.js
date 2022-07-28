@@ -85,7 +85,7 @@ function MPlayer(url,tittle,vkey,nexturl,image){
         };
     }
     var mp = new MuiPlayer(playerConfig);
-    mp.showToast('祝您观影愉快');
+    mp.showToast('请勿相信视频中的广告，祝您观影愉快');
     mp.on('ready',function(){
         var video = mp.video();
         var currentTime = localStorage.getItem(vkey);
@@ -112,6 +112,6 @@ function playcss(num){
     }
 }
 function TheError(){
-    $("body").append('<div id=\"error\"><h1><font color="red">哦呀，解析失败了鸭～</br>刷新重试或联系站长修复</font></br><a href="https://sighttp.qq.com/authd?IDKEY=86ce521ca5276625141cc7adca8a1b4fde3dcf468b8fa054" target="_blank"><font color="yellow">点击联系站长反馈</font></a></h1></div>');
+    $("body").append('<div id=\"error\"><h1><font color="red">哦呀，解析失败了鸭～</br>刷新重试或联系站长修复</font></br><a href="http://wpa.qq.com/msgrd?v=3&uin=120241400&site=qq&menu=yes" target="_blank"><font color="yellow">点击联系站长反馈</font></a></h1></div>');
 	$("#loading").remove();
 }
