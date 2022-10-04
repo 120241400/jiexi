@@ -85,7 +85,7 @@ function MPlayer(url,tittle,vkey,nexturl,image){
         };
     }
     var mp = new MuiPlayer(playerConfig);
-    mp.showToast('请勿相信视频中的广告，点左下角播放祝您观影愉快');
+    mp.showToast('请勿相信视频中的广告，点左下角播放视频');
     mp.on('ready',function(){
         var video = mp.video();
         var currentTime = localStorage.getItem(vkey);
