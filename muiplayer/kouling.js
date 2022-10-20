@@ -158,7 +158,7 @@
 		//	if(!koukou){    
 			var kou = new Array();
 			//ry
-	      	kou[1] = "##VhaEOUpNsw8##";
+	      	kou[1] = "##l5wr8Pnu5FbFw8##";
 			//hw9
 			var min = 1;
             var max = 5;
