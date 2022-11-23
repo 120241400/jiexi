@@ -112,6 +112,6 @@ function playcss(num){
     }
 }
 function TheError(){
-    $("body").append('<div id=\"error\"><h1><font color="red">哦呀，解析失败了鸭～</br>刷新重试或联系站长修复</font></br><a href="http://wpa.qq.com/msgrd?v=3&uin=120241400&site=qq&menu=yes" target="_blank"><font color="yellow">点击联系站长反馈</font></a></h1></div>');
+    $("body").append('<div id=\"error\"><h1><font color="red">哦呀，解析失败了～</br>刷新重试或联系站长修复</font></br><a href="tencent://message/?uin=120241400" target="_blank"><font color="yellow">点击联系站长反馈</font></a></h1></div>');
 	$("#loading").remove();
 }
