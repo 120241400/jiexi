@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
-<title>Aliplayer</title>
+<title>忘情Aliplayer</title>
 <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.9.19/skins/default/aliplayer-min.css" />
 <script type="text/javascript" charset="utf-8" src="https://g.alicdn.com/de/prismplayer/2.9.19/aliplayer-min.js"></script>
 <style type="text/css">
@@ -19,7 +19,7 @@
 <div id="stats">请误相信视频中的广告信息</div>
 <script>
 	var lurl=window.location.href;
-if(lurl.indexOf('ali.html?url=')>0) {var url=lurl.split('ali.html?url=')[1]}else{var url="";};
+if(lurl.indexOf('?url=')>0) {var url=lurl.split('?url=')[1]}else{var url="";};
     //    var url = 'https://test-streams.mux.dev/x36xhzz/url_2/193039199_mp4_h264_aac_ld_7.m3u8';
 var player = new Aliplayer({
   "id": "player-con",
