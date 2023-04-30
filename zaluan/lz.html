@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui">
+<meta name="referrer" content="no-referrer">
+<title>乐多解析</title>
+<link rel="stylesheet" href="https://nojx.cc/muiplayer/css/mui-player.min.css">
+<link rel="stylesheet" href="https://nojx.cc/muiplayer/css/muiplayer.css">
+<script src="https://nojx.cc/muiplayer/js/jquery.min.js"></script>
+<script src="https://nojx.cc/muiplayer/js/mui-player.min.js"></script>
+<script src="https://nojx.cc/muiplayer/js/mui-player-desktop-plugin.min.js"></script>
+<script src="https://nojx.cc/muiplayer/js/mui-player-mobile-plugin.min.js"></script>
+<script src="https://nojx.cc/muiplayer/js/jquery.xctips.js"></script>
+<script src="https://nojx.cc/muiplayer/js/hls.min.js"></script>
+<script src="https://nojx.cc/muiplayer/js/flv.min.js"></script>
+<script src="https://nojx.cc/muiplayer/js/setting.js"></script>
+<style type="text/css">
+       body,html{width:100%;height:100%;background:#000;padding:0;margin:0;overflow-x:hidden;overflow-y:hidden}
+	   #player-con{position:inherit}
+	  #loading {
+        background:url(https://img.zcool.cn/community/0113445e5b5a11a801216518b01a96.gif?https://wangqing.webcindario.com/888/suijitu/pc?https://img.zcool.cn/community/018b305a1d375ca80120908da51a31.gif);
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        z-index: 10000000001;
+        background-size: 100% 100%;
+    }
+    #error{
+        background:url(https://pic.rmb.bdstatic.com/bjh/a7f890b31588ad011dc0d62628fab326.jpeg);
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        text-align:center;
+        display:table; 
+        position: absolute;
+        z-index: 10000000001;
+        background-size: 100% 100%; 
+    }
+    </style>
+</head>
+<body>
+<div id="loading"  align="center"></div>
+<div id="mui-player"><!--img src="https://img.zcool.cn/community/018b305a1d375ca80120908da51a31.gif" width="100%" height="100%"--></div>
+<script type="text/javascript">
+//var dl="https://www.5020.work/json/jx1.php?url="
+var dl="https://www.5020.work/json/jx1.php?url="
+var bof="https://8nojx.cc/muiplayer?url=";
+var jx=[{"name":"解析1","url":"https://www.itvbox.cc/fflz.php?url="},
+{"name":"解析2","url":"https://1play.fuqizhishi.com/jx/API.php?appkey=zhitigonggeixiaobai4567891&url="},
+{"name":"解析3","url":"https://1svip.rongxingvr.top/api/?key=bpWXKrAJUKm3puOCH4&url="},
+{"name":"解析4","url":"https://1svip.znjson.com/api/?key=gX8j9IPvoQ5mFmlIzu&url="},
+{"name":"解析5","url":"http://8jxhc.ioivip.xyz/?url="},
+{"name":"解析6","url":"https://8json.freejx.in/?url="}
+];
+//https://json.hfyrw.com/mao.go?url=,https://jhjx.kuanjv.com/newky/?url=https://json.5lp.net/json.php?url=
+//http://23.224.174.74:5579/api.php?url=https://jx.300ys.xyz/jiexi/v.php/?url=
+//http://47.100.138.210:91/home/api?type=ys&uid=7593435&key=ehortuyAHMNQTWX457&url=https://apis.jxcxin.cn/api/jx?url=
+//https://jhpc.manduhu.com/j1217.php?url=https://json.hfyrw.com/mao.go?url=https://vvip.funsline.cn/api/?key=JNiddoRwmLBYehxnFq&url=
+	//42.157.128.85:880/analysis/json/?uid=1735&my=bglwBCEHIJLTWXZ237&url= https://a.dxzj88.com/jhjhjx/?url=
+	//https://api.m3u8.tv:5678/home/api?type=ys&uid=1931000&key=gktuvyzABEORSYZ135&url=
+//var url="http://v.qq.com/x/cover/mzc00200p51jpn7/s004237dmoq.html";
+if ((navigator.userAgent.indexOf('MSIE') >= 0) || (navigator.userAgent.indexOf('Trident') >= 0)) {
+    alert("本播放器在IE浏览器和兼容模式下无法播放，请将浏览器设置为 极速模式！")
+}
+function zy2(id){
+  var url3=dl+jx[id].url+url;
+$.getJSON(url3, function(data){
+console.log(data);
+
+if (data.code == "200"){
+$('#mui-player').html("");
+	var url=data.url;
+    var config = {
+        "url": url,
+        "vkey": "",
+        "key":"",
+        "next":"",
+        "title":"",
+        "tim":"",
+    }
+    player(config);
+	  
+}else if(id=="0"){zy2(1);}
+else if(id=="1"){zy2(2);}
+else if(id=="2"){zy2(3);}
+else if(id=="3"){zy2(4);}
+else if(id=="4"){zy2(5);}
+else{document.getElementById("config").src="https://z1.m1907.cn/?eps=0&jx="+url;}
+})};
+var lurl=window.location.href;
+if(lurl.indexOf('?url=')>0){ url=lurl.split('?url=')[1];zy2(0);}else{document.getElementById("config").src="https://7080.wang/jx/wu.html";}
+zy2(0);
+</script>
+</body>
+</html> 
