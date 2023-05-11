@@ -26,7 +26,7 @@
 <video id="video" src controls="controls" autoplay="autoplay" preload="preload" poster="/static/img/loading_wap.gif" width="100%" height="100%" webkit-playsinline="true" playsinline="true" x5-playsinline="true"></video>
 <script>
      var url1=window.location.href;
-if(url1.indexOf('zhilian.html?url=')>0) {var url_adress=url1.split('zhilian.html?url=')[1];}else {var url_adress="./wu.html";}
+if(url1.indexOf('?url=')>0) {var url_adress=url1.split('?url=')[1];}else {var url_adress="./wu.html";}
 document.getElementById("video").src =url_adress;
 </script>
 </body>
