@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>LA.init({id:"K1Dc1dGmReVT0WVo",ck:"K1Dc1dGmReVT0WVo"})</script>
+<title>大漠P2P兼容性播放器</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=11" />
+        <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">    
+<link rel="stylesheet" type="text/css" href="/jiexi/ckplayer/css/ckplayer.css">
+<script type="text/javascript" charset="utf-8" src="/jiexi/ckplayer/js/ckplayer.js"></script>
+<script type="text/javascript" charset="utf-8" src="/jiexi/ckplayer/flv.js/flv.js"></script>
+<script type="text/javascript" charset="utf-8" src="/jiexi/ckplayer/hls.js/hls.js"></script>
+<script type="text/javascript" charset="utf-8" src="/jiexi/ckplayer/mpegts.js/mpegts.js"></script>    
+    
+<style type="text/css">
+body,html{height:100%;background-color:#000;margin:0px;padding:0px;overflow:hidden;}
+#rongyao{height:100%;}
+</style>
+</head>
+<body>
+<div id="rongyao"></div>
+<script type="text/javascript">
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] == variable) {
+            return pair[1];
+        }
+    }
+    return (false);
+};
+
+var videoObject = {
+container: '.video', //容器的ID或className
+    menu:[
+                        {
+                                title:'P2P兼容性播放器',
+                                click:'player.playOrPause',
+                        }
+                        ],
+    plug:'m3u8',//插件 m3u8 flv
+    logo:'logo.png',
+    container: '#rongyao',
+    autoplay: true,
+    loaded: 'loadedHandler',
+    screenshot:true,//截图功能是否开启
+        live:false,//直播 true false
+    plug:'hls.js',//使用hls.js插件播放m3u8
+    rightBar:true,//是否开启右边控制栏
+    smallWindows:true,//是否启用小窗口模式
+    playbackrateOpen:true,//是否开启控制栏倍速选项
+    webFull:true,//是否启用页面全屏按钮，默认不启用
+    theatre:true,//是否启用剧场模式按钮，默认不启用
+    video: getQueryVariable("url")
+};
+var player=new ckplayer(videoObject);
+</script>
+
+</body>
+</html>
