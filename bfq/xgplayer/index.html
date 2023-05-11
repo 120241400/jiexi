@@ -15,7 +15,7 @@
 <script>
 	  var lurl=window.location.href;
 //var lurl= decodeURIComponent(url1);
-if(lurl.indexOf('mp4.html?url=')>0) {var url=lurl.split('mp4.html?url=')[1];}else {var url="";}
+if(lurl.indexOf('?url=')>0) {var url=lurl.split('?url=')[1];}else {var url="";}
       let player = new Player({
 		"id": "mse",
 		"url": url,
