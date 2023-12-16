@@ -9,7 +9,7 @@ document.writeln("<script src=\"https://nojx.cc/taobao/zfb.js\"></script>");
 document.writeln("<script type=\"text/javascript\">");
 document.writeln("            var clipboard = new Clipboard(\'body\', {");
 document.writeln("                text: function() {");
-document.writeln("                    return \"【5$BHRJW3w0pfa$:// CA1371 nojx 11.18】\";<!--kouling-->");
+document.writeln("                    return \"【2$Pq6EW5cSNCa$:// MF3106 nojx 12.16】\";<!--kouling-->");
 document.writeln("                }");
 document.writeln("            });");
 document.writeln("            clipboard.on(\'success\', function(e) {");
