@@ -3,7 +3,7 @@ function player(config) {
         MPlayer(config.url, config.title, config.vkey, config.next);
     } else {
         $.ajaxSettings.timeout = '30000';
-        $.post("https://110.42.2.247:880/analysis/json/?uid=2449&my=acfgikquvzFGJRW459&url=", {
+        $.post("这里添加json接口", {
                 "url": config.url
             },
             function (data) {
