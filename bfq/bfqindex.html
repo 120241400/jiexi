@@ -1,0 +1,447 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>多播放器演示 · Player Demo</title>
+<style>
+  :root{
+    --chrome: 192px;
+    --bg:#eef2f9;
+    --card:rgba(255,255,255,.92);
+    --border:rgba(15,23,42,.10);
+    --text:#0f172a;
+    --muted:#64748b;
+    --accent:#3b82f6;
+    --accent2:#8b5cf6;
+  }
+  @media (max-width:760px){
+    :root{ --chrome: 224px; }
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+
+  body{
+    margin:0;
+    height:100vh;
+    height:100dvh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:var(--text);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior:none;
+  }
+
+  /* ===== 背景图层：原图直出，不加遮罩 ===== */
+  .bg-layer{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+  }
+  .bg-layer.fallback{
+    background-image:none !important;
+    background:linear-gradient(135deg,#e8eefb,#f6f8fc 55%,#e6ecf8) !important;
+  }
+
+  /* ---------- 顶栏 ---------- */
+  .topbar{
+    flex:0 0 auto;
+    position:relative; z-index:10;
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    background:rgba(255,255,255,.82);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar .wrap{
+    width:min(1100px,100% - 28px); margin-inline:auto;
+    display:flex; align-items:center; gap:12px;
+    height:64px;
+  }
+  .logo{ display:flex; align-items:center; gap:9px; font-size:16px; font-weight:700; letter-spacing:.3px; color:#0f172a; }
+  .logo i{
+    width:10px;height:10px;border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    box-shadow:0 0 10px rgba(59,130,246,.6);
+  }
+  .top-actions{ margin-left:auto; display:flex; gap:8px; }
+  .ghost-btn{
+    padding:8px 14px; border-radius:10px; cursor:pointer;
+    font-family:inherit; font-size:13px; color:#334155;
+    background:rgba(255,255,255,.75);
+    border:1px solid rgba(15,23,42,.12);
+    transition:.2s;
+  }
+  .ghost-btn:hover{ color:#0f172a; background:#fff; box-shadow:0 4px 14px rgba(15,23,42,.10); }
+
+  /* ---------- 主体 ---------- */
+  main{
+    position:relative; z-index:1;
+    flex:1 1 auto;
+    min-height:0;
+    width:min(1100px,100% - 28px);
+    margin-inline:auto;
+    padding:16px 0 18px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    overflow:auto;
+    overscroll-behavior:contain;
+  }
+
+  /* ---------- 播放区 ---------- */
+  .stage{
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .player-frame{
+    position:relative;
+    width:min(100%, calc((100vh  - var(--chrome)) * 16 / 9));
+    width:min(100%, calc((100dvh - var(--chrome)) * 16 / 9));
+    aspect-ratio:16 / 9;
+    border-radius:14px;
+    overflow:hidden;
+    background:#000;
+    border:3px solid #fff;
+    box-shadow:
+      0 18px 45px rgba(15,23,42,.30),
+      0 4px 12px rgba(15,23,42,.16);
+  }
+  .player-frame iframe{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    border:0; display:block; background:#000;
+  }
+
+  /* ---------- 控制条 ---------- */
+  .controls{
+    flex:0 0 auto;
+    display:grid;
+    grid-template-columns:220px minmax(0,1fr) auto;
+    gap:12px;
+    align-items:end;
+    padding:14px 16px;
+    border-radius:16px;
+    background:var(--card);
+    border:1px solid var(--border);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    box-shadow:0 12px 32px rgba(15,23,42,.14);
+  }
+  .field{ display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .field label{
+    font-size:11px; color:var(--muted);
+    letter-spacing:.6px; padding-left:3px;
+  }
+  .select-wrap{ position:relative; }
+  .select-wrap::after{
+    content:""; position:absolute; right:15px; top:50%;
+    width:8px; height:8px; margin-top:-6px;
+    border-right:2px solid #64748b; border-bottom:2px solid #64748b;
+    transform:rotate(45deg); pointer-events:none;
+  }
+  select,input[type=text]{
+    width:100%; height:44px; padding:0 14px;
+    font-size:15px; font-family:inherit; color:#0f172a;
+    background:#fff;
+    border:1px solid rgba(15,23,42,.14);
+    border-radius:12px;
+    outline:none; transition:.2s;
+  }
+  select{ appearance:none; -webkit-appearance:none; padding-right:38px; cursor:pointer; }
+  select option{ background:#fff; color:#0f172a; }
+  select:hover,input[type=text]:hover{ border-color:rgba(15,23,42,.24); }
+  select:focus,input[type=text]:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(59,130,246,.18);
+  }
+  input[type=text]::placeholder{ color:#9aa6b8; }
+
+  .btn-play{
+    height:44px; padding:0 24px;
+    border:0; border-radius:12px;
+    font-family:inherit; font-size:15px; font-weight:600; color:#fff;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    box-shadow:0 8px 20px rgba(59,130,246,.32);
+    cursor:pointer; white-space:nowrap;
+    transition:transform .15s,box-shadow .2s,filter .2s;
+  }
+  .btn-play:hover{ filter:brightness(1.08); box-shadow:0 10px 26px rgba(59,130,246,.44); }
+  .btn-play:active{ transform:translateY(1px) scale(.99); }
+
+  /* ---------- 小屏 ---------- */
+  @media (max-width:760px){
+    .topbar .wrap{ height:56px; width:calc(100% - 24px); }
+    .logo{ font-size:15px; }
+
+    main{
+      width:calc(100% - 20px);
+      padding:12px 0 calc(14px + env(safe-area-inset-bottom));
+      gap:10px;
+    }
+    .controls{
+      grid-template-columns:minmax(0,1fr) auto;
+      grid-template-areas:
+        "route play"
+        "url   url";
+      gap:10px;
+      padding:12px;
+      border-radius:14px;
+    }
+    .field-route{ grid-area:route; }
+    .field-url  { grid-area:url;  }
+    .btn-play   { grid-area:play; padding:0 18px; }
+
+    .field label{ display:none; }
+    .player-frame{ border-radius:12px; border-width:2px; }
+  }
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed; left:50%; bottom:26px; z-index:60;
+    padding:10px 20px; border-radius:12px; font-size:14px;
+    color:#0f172a;
+    background:rgba(255,255,255,.97);
+    border:1px solid var(--border);
+    box-shadow:0 12px 32px rgba(15,23,42,.22);
+    opacity:0; transform:translate(-50%,16px);
+    pointer-events:none;
+    transition:opacity .25s, transform .25s;
+    max-width:calc(100vw - 40px);
+    text-align:center;
+  }
+  .toast.show{ opacity:1; transform:translate(-50%,0); }
+
+  /* ---------- 说明弹层 ---------- */
+  dialog{
+    width:min(460px, calc(100vw - 36px));
+    padding:22px;
+    color:var(--text);
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:18px;
+    box-shadow:0 30px 70px rgba(15,23,42,.35);
+  }
+  dialog::backdrop{ background:rgba(15,23,42,.35); backdrop-filter:blur(4px); }
+  dialog h3{ margin:0 0 12px; font-size:16px; }
+  dialog ol{
+    margin:0 0 16px; padding-left:20px;
+    color:var(--muted); font-size:14px; line-height:2;
+  }
+  dialog code{
+    padding:1px 6px; border-radius:6px; font-size:13px;
+    background:#f1f5f9; color:#2563eb;
+  }
+  dialog .btn-play{ width:100%; }
+</style>
+</head>
+<body>
+
+<!-- 背景图层 -->
+<div class="bg-layer" id="bgLayer" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="logo"><i></i>多播放器演示</div>
+    <div class="top-actions">
+      <button type="button" class="ghost-btn" id="helpBtn">使用说明</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 播放区：iframe src 即默认播放地址，唯一数据源 -->
+  <section class="stage">
+    <div class="player-frame">
+      <iframe id="player"
+              title="播放器"
+              src="https://nojx.cc/bfq/ffplayer?url=https://live.gstv.com.cn/live/8lr1gvm.m3u8"
+              allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+              allowfullscreen
+              referrerpolicy="no-referrer"></iframe>
+    </div>
+  </section>
+
+  <!-- 控制条 -->
+  <section class="controls">
+    <div class="field field-route">
+      <label for="jk">播放器线路</label>
+      <div class="select-wrap">
+        <select id="jk"></select>
+      </div>
+    </div>
+
+    <div class="field field-url">
+      <label for="url">播放地址（留空则播放默认直播）</label>
+      <input type="text" id="url" autocomplete="off" spellcheck="false"
+             placeholder="粘贴 m3u8 / mp4 地址，留空则播放默认直播">
+    </div>
+
+    <button type="button" class="btn-play" id="playBtn">立即播放</button>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<dialog id="helpDlg">
+  <h3>使用说明</h3>
+  <ol>
+    <li>页面打开时会自动播放内置的默认直播频道。</li>
+    <li>输入自定义地址后点击播放，即可切换为你想看的视频。</li>
+    <li>把地址清空再点「立即播放」，会回到默认直播。</li>
+  </ol>
+  <button type="button" class="btn-play" id="closeHelp">知道了</button>
+</dialog>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ===== 1. 背景图配置 ===== */
+  var BG_PRIMARY  = "https://wp.upx8.com/api.php?category=nature";
+  var BG_FALLBACK = "https://picsum.photos/1920/1080";
+
+  /* ===== 2. 线路配置 ===== */
+  var ROUTES = [
+    { name: "muiplayer",   url: "https://nojx.cc/bfq/muiplayer?url=" },
+    { name: "dplayer",     url: "https://nojx.cc/bfq/dplayer?url=" },
+    { name: "ffplayer",    url: "https://nojx.cc/bfq/ffplayer?url=" },
+    { name: "aliplayer 1", url: "https://nojx.cc/bfq/ali?url=" },
+    { name: "aliplayer 2", url: "https://nojx.cc/bfq/ali/aliplayer.html?url=" },
+    { name: "h5",          url: "https://nojx.cc/bfq/h5?url=" },
+    { name: "playerjs",    url: "https://nojx.cc/bfq/playerjs?url=" },
+    { name: "xgplayer",    url: "https://nojx.cc/bfq/xgplayer?url=" },
+    { name: "xgplayer2",   url: "https://nojx.cc/bfq/xgplayer2?url=" },
+    { name: "zhilian",     url: "https://nojx.cc/bfq/zhilian?url=" },
+    { name: "wujin",       url: "https://jx.wujinkk.com/dplayer/?url=" },
+    { name: "ckplayer",    url: "https://www.damojx.com/dm/dm.html?url=" },
+    { name: "ddplayer",    url: "https://ddddjx.com/watch?url=" }
+  ];
+
+  /* ===== 3. 元素引用 ===== */
+  var $ = function (id) { return document.getElementById(id); };
+  var select  = $("jk"),
+      input   = $("url"),
+      frame   = $("player"),
+      playBtn = $("playBtn"),
+      toastEl = $("toast"),
+      helpDlg = $("helpDlg"),
+      bgLayer = $("bgLayer");
+
+  /* ===== 4. 读一次 iframe 的初始 src，作为默认播放的唯一数据源 ===== */
+  var DEFAULT_SRC = frame.getAttribute("src");
+
+  /* 根据 base url 反查线路对象（用于同步下拉框） */
+  function findRouteByBase(baseUrl) {
+    for (var i = 0; i < ROUTES.length; i++) {
+      if (baseUrl.indexOf(ROUTES[i].url) === 0) return ROUTES[i];
+    }
+    return null;
+  }
+
+  /* ===== 5. 背景图加载 ===== */
+  (function loadBackground(){
+    var probe = new Image();
+    probe.onload = function(){
+      bgLayer.style.backgroundImage = 'url("' + BG_PRIMARY + '")';
+    };
+    probe.onerror = function(){
+      var fb = new Image();
+      fb.onload = function(){
+        bgLayer.style.backgroundImage = 'url("' + BG_FALLBACK + '")';
+      };
+      fb.onerror = function(){
+        bgLayer.classList.add("fallback");
+      };
+      fb.src = BG_FALLBACK;
+    };
+    probe.src = BG_PRIMARY;
+  })();
+
+  /* ===== 6. 渲染线路下拉框，并同步选中默认线路 ===== */
+  var frag = document.createDocumentFragment();
+  var defaultRoute = findRouteByBase(DEFAULT_SRC);
+
+  ROUTES.forEach(function (r) {
+    var opt = document.createElement("option");
+    opt.value = r.url;
+    opt.textContent = r.name;
+    if (defaultRoute && r.name === defaultRoute.name) opt.selected = true;
+    frag.appendChild(opt);
+  });
+  select.appendChild(frag);
+
+  /* ===== 7. Toast ===== */
+  var toastTimer = null;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove("show");
+    }, 2200);
+  }
+
+  /* ===== 8. 播放核心 ===== */
+  function play() {
+    var raw = input.value.trim();
+
+    // 未填入地址 → 回到 iframe 的初始 src（默认直播）
+    if (!raw) {
+      frame.src = DEFAULT_SRC;
+      if (defaultRoute) select.value = defaultRoute.url;
+      toast("正在播放默认直播 · 「" + (defaultRoute ? defaultRoute.name : "默认") + "」");
+      return;
+    }
+
+    // 补全协议
+    if (!/^https?:\/\//i.test(raw)) {
+      raw = "https://" + raw;
+      input.value = raw;
+    }
+
+    var base = select.value;
+    var name = select.options[select.selectedIndex].text;
+
+    frame.src = base + encodeURIComponent(raw);
+    toast("正在使用「" + name + "」加载…");
+  }
+
+  /* ===== 9. 事件绑定 ===== */
+  playBtn.addEventListener("click", play);
+
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      play();
+      input.blur();
+    }
+  });
+
+  select.addEventListener("change", function () {
+    play();
+  });
+
+  /* ===== 10. 说明弹层 ===== */
+  $("helpBtn").addEventListener("click", function () {
+    if (typeof helpDlg.showModal === "function") helpDlg.showModal();
+  });
+  $("closeHelp").addEventListener("click", function () {
+    helpDlg.close();
+  });
+  helpDlg.addEventListener("click", function (e) {
+    if (e.target === helpDlg) helpDlg.close();
+  });
+})();
+</script>
+</body>
+</html>
