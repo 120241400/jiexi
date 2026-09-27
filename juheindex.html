@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>聚合解析</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        width: 100vw;
+        height: 100vh;
+        padding: 15px;
+        background-color: #f8f9fa;
+        overflow: hidden;
+    }
+
+    .empty-tip {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 16px;
+        color: #666;
+    }
+
+    /* ===== 网格容器 ===== */
+    .parse-container {
+        display: grid;
+        gap: 15px;
+        width: 100%;
+        height: 100%;
+        grid-template-columns: repeat(4, 1fr);   /* 电脑端 4 列 */
+        grid-auto-rows: min-content;             /* 行高 = 内容高度 */
+        align-items: start;                      /* 卡片不被行高拉伸 */
+        align-content: start;
+        overflow-y: auto;
+    }
+
+    @media (max-width: 768px) {
+        body { padding: 10px; }
+        .parse-container {
+            grid-template-columns: repeat(2, 1fr);  /* 手机端 2 列 */
+            gap: 10px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .parse-container { gap: 8px; }
+    }
+
+    /* ===== 卡片：高度紧贴内容，播放器 + 按钮上下无缝 ===== */
+    .card {
+        display: flex;
+        flex-direction: column;
+        align-self: start;          /* 不被网格拉伸，高度由内容决定 */
+        height: fit-content;
+        width: 100%;
+        background: #fff;
+        border-radius: 6px;
+        overflow: hidden;           /* 底部按钮圆角随卡片裁切 */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* ===== 播放器：7:5 比例，固定不伸缩 ===== */
+    .square-item {
+        position: relative;
+        flex: 0 0 auto;             /* 关键：不拉伸、不压缩 */
+        width: 100%;
+        padding-top: 71.43%;        /* 5/7，保持原来的 7:5 尺寸 */
+        background-color: #000;
+    }
+
+    .square-item iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    /* ===== 按钮：紧贴播放器底部，同宽，无缝 ===== */
+    .fullscreen-btn {
+        display: block;
+        flex: 0 0 auto;
+        width: 100%;
+        height: 36px;
+        margin: 0;                  /* 关键：清除任何外边距 */
+        padding: 0;
+        border: none;
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+        background: linear-gradient(#e63946, #d62828);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        line-height: 1;
+        cursor: pointer;
+        transition: background 0.15s;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .fullscreen-btn:hover  { background: linear-gradient(#d62828, #b71c1c); }
+    .fullscreen-btn:active { background: #a4161a; }
+
+    @media (max-width: 768px) {
+        .fullscreen-btn { height: 33px; font-size: 13px; }
+    }
+    @media (max-width: 480px) {
+        .fullscreen-btn { height: 30px; font-size: 12px; letter-spacing: 0; }
+    }
+
+    /* ===== 浏览器内全屏：整张卡片铺满窗口 ===== */
+    .card.fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .card.fullscreen .square-item {
+        flex: 1 1 auto;             /* 全屏时撑满剩余高度 */
+        height: auto;
+        padding-top: 0;
+    }
+
+    .card.fullscreen .fullscreen-btn {
+        height: 46px;
+        font-size: 15px;
+        border-top: none;
+    }
+
+    .parse-container.fullscreen-mode {
+        gap: 0;
+        overflow: hidden;
+    }
+
+    .card.hidden { display: none; }
+
+    /* iframe 系统全屏层级 */
+    iframe:-webkit-full-screen { width: 100% !important; height: 100% !important; }
+    iframe:-moz-full-screen    { width: 100% !important; height: 100% !important; }
+    iframe:fullscreen          { width: 100% !important; height: 100% !important; }
+</style>
+</head>
+<body>
+    <div id="parseContainer" class="parse-container"></div>
+    <div id="emptyTip" class="empty-tip" style="display: none;">
+        请在URL后拼接 ?url=需要解析的视频链接
+    </div>
+
+    <script>
+        // 解析接口数组
+        const apiArray = [
+            "https://mtjiexi.cc:966/?url=",
+            "https://ryplayer.com?url=",
+            "https://www.heiliaozyjx.com/?url=",
+            "https://xxb-player.com/player.php/?url=",
+            "https://www.guangsujx.com/m3u8/?url=",
+            "https://www.xinlangjiexi.com/m3u8/?url=",
+            "https://subojiexi.com/play/?url=",
+            "https://hhjiexi.com/play/?url=",
+            "https://www.iqiyizyjx.com/?url=",
+            "https://hd.iapijy.com/play?url=",
+            "https://ryplayer.com?url=",
+            "https://www.heiliaozyjx.com/?url=",
+            "https://xxb-player.com/player.php/?url=",
+            "https://www.guangsujx.com/m3u8/?url=",
+            "https://www.xinlangjiexi.com/m3u8/?url=",
+            "https://subojiexi.com/play/?url=",
+            "https://hhjiexi.com/play/?url=",
+            "https://www.iqiyizyjx.com/?url=",
+            "https://hd.iapijy.com/play?url=",
+            "https://vip.vipuuvip.com/?url=",
+            "https://huyajx.com/play/?url="
+        ];
+
+        const originUrl = window.location.href.split("url=")[1] || "";
+        const parseContainer = document.getElementById('parseContainer');
+        const emptyTip = document.getElementById('emptyTip');
+        let fullscreenIndex = -1;
+
+        // 渲染所有播放器
+        function renderParseFrames() {
+            if (!originUrl) {
+                emptyTip.style.display = "block";
+                return;
+            }
+
+            let html = "";
+            apiArray.forEach((api, index) => {
+                const fullUrl = api + encodeURIComponent(originUrl);
+                html += `
+                    <div class="card" id="item-${index}">
+                        <div class="square-item">
+                            <iframe
+                                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-fullscreen"
+                                allow="fullscreen *; autoplay *; encrypted-media *; picture-in-picture *"
+                                allowfullscreen="true"
+                                referrerPolicy="no-referrer"
+                                src="${fullUrl}"
+                                id="iframe-${index}"
+                            ></iframe>
+                        </div>
+                        <button class="fullscreen-btn" type="button"
+                                onclick="toggleFullscreen(${index})">全屏播放</button>
+                    </div>
+                `;
+            });
+            parseContainer.innerHTML = html;
+        }
+
+        function stopIframe(id) {
+            const f = document.getElementById(id);
+            if (f) f.src = 'about:blank';
+        }
+
+        function restoreIframe(index) {
+            const f = document.getElementById(`iframe-${index}`);
+            if (f) f.src = apiArray[index] + encodeURIComponent(originUrl);
+        }
+
+        // 全屏切换
+        function toggleFullscreen(itemIndex) {
+            const cards = document.querySelectorAll('.card');
+
+            if (fullscreenIndex === itemIndex) {
+                // 退出全屏
+                cards.forEach((card, i) => {
+                    card.classList.remove('fullscreen');
+                    if (i !== itemIndex) {
+                        card.classList.remove('hidden');
+                        restoreIframe(i);
+                    }
+                    card.querySelector('.fullscreen-btn').textContent = '全屏播放';
+                });
+                parseContainer.classList.remove('fullscreen-mode');
+                fullscreenIndex = -1;
+            } else {
+                // 进入全屏
+                cards.forEach((card, i) => {
+                    if (i === itemIndex) {
+                        card.classList.add('fullscreen');
+                        card.classList.remove('hidden');
+                        card.querySelector('.fullscreen-btn').textContent = '退出全屏';
+                    } else {
+                        card.classList.remove('fullscreen');
+                        card.classList.add('hidden');
+                        stopIframe(`iframe-${i}`);
+                    }
+                });
+                parseContainer.classList.add('fullscreen-mode');
+                fullscreenIndex = itemIndex;
+            }
+        }
+
+        // 系统全屏事件
+        ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange'].forEach(ev => {
+            document.addEventListener(ev, () => {
+                const el = document.fullscreenElement ||
+                           document.webkitFullscreenElement ||
+                           document.mozFullScreenElement;
+                if (el && el.tagName === 'IFRAME') el.style.zIndex = 10000;
+            });
+        });
+
+        renderParseFrames();
+    </script>
+</body>
+</html>
