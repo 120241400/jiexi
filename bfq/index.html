@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>多播放器演示 · Player Demo</title>
+<title>多播放器演示</title>
 <style>
   :root{
     --chrome: 192px;
@@ -269,12 +269,12 @@
 </header>
 
 <main>
-  <!-- 播放区：iframe src 即默认播放地址（自带 autoplay，打开即播，不做静音） -->
+  <!-- 播放区：iframe src 即默认播放地址，x5player 自身会自动播放，无需额外参数 -->
   <section class="stage">
     <div class="player-frame">
       <iframe id="player"
               title="播放器"
-              src="https://nojx.cc/bfq/x5player?url=https://live.gstv.com.cn/live/8lr1gvm.m3u8&amp;autoplay=1"
+              src="https://nojx.cc/bfq/x5player?url=https://live.gstv.com.cn/live/8lr1gvm.m3u8"
               allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
               allowfullscreen
               referrerpolicy="no-referrer"></iframe>
@@ -405,7 +405,7 @@
   function play() {
     var raw = input.value.trim();
 
-    // 未填入地址 → 回到 iframe 的初始 src（默认直播，自带 autoplay）
+    // 未填入地址 → 回到 iframe 的初始 src（默认直播，x5player 自动播放）
     if (!raw) {
       frame.src = DEFAULT_SRC;
       if (defaultRoute) select.value = defaultRoute.url;
