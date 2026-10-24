@@ -1,0 +1,266 @@
+﻿
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
+    <title>忘情LD解析</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== 顶部区域 ===== */
+        .top-area {
+            flex-shrink: 0;
+            padding-top: calc(6px + env(safe-area-inset-top, 0px));
+            padding-left: calc(8px + env(safe-area-inset-left, 0px));
+            padding-right: calc(8px + env(safe-area-inset-right, 0px));
+        }
+
+        /* ===== 线路面板（文档流内展开，挤压播放器） ===== */
+        .panel {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height .35s ease, opacity .25s ease, padding-bottom .35s ease;
+            width: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .panel.open {
+            max-height: 400px;
+            opacity: 1;
+            padding-bottom: 8px;
+        }
+
+        /* ===== 线路按钮网格：一行 3 / 4 / 7 个，等宽等高自动对齐 ===== */
+        .panel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px 6px;
+            width: 100%;
+        }
+        @media (min-width: 400px) {
+            .panel-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+        @media (min-width: 768px) {
+            .panel-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+        }
+
+        /* ===== 按钮通用样式 ===== */
+        .btn {
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            height: 32px;
+            line-height: 32px;
+            padding: 0 6px;
+            border-radius: 16px;
+            color: #fff;
+            font-size: 13px;
+            text-decoration: none;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color .2s ease, opacity .2s ease;
+        }
+        .btn:active { opacity: .85; }
+        .btn-red  { background: #ff0000; }
+        .btn-blue { background: #1890ff; }
+        .btn-blue.active { background: #096dd9; }
+
+        /* 关闭按钮：跟随内容宽度，靠左对齐 */
+        #Close {
+            align-self: flex-start;
+            width: auto;
+            padding: 0 18px;
+        }
+
+        /* ===== 切换线路按钮（与网格按钮同高，对齐更整齐） ===== */
+        .slide {
+            display: inline-block;
+            height: 32px;
+            line-height: 32px;
+            padding: 0 18px;
+            border-radius: 16px;
+            background: #1890ff;
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: opacity .2s ease;
+        }
+        .slide:active { opacity: .85; }
+        .slide.hide { display: none; }
+
+        /* ===== 中间播放器区域（垂直居中） ===== */
+        .player-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 0;
+            padding: 0 calc(8px + env(safe-area-inset-right, 0px)) 0 calc(8px + env(safe-area-inset-left, 0px));
+        }
+        #jiexi {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* ===== 底部区域（与顶部同高，含底部安全区） ===== */
+        .bottom-area {
+            flex-shrink: 0;
+            height: calc(42px + env(safe-area-inset-bottom, 0px));
+            width: 100%;
+        }
+
+        /* ===== 空状态提示 ===== */
+        .empty-tip {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+            padding: 0 16px;
+        }
+        .empty-tip h1 {
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .empty-tip p {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* 超小屏微调 */
+        @media (max-width: 340px) {
+            .btn, .slide { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部区域 -->
+    <div class="top-area">
+        <!-- 线路选择面板 -->
+        <div class="panel" id="panel">
+            <a class="btn btn-red" id="Close" href="javascript:void(0)">关闭选择 ×</a>
+            <div class="panel-grid">
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://bd.jx.cn/?url=">解析1线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://free.maccms.xyz/?url=">解析2线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://120241400.com/app/lele/youhou/jx3.html?url=">解析3线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://120241400.com/app/lele/youhou/jx4.html?url=">解析4线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://120241400.com/app/lele/youhou/jx5.html?url=">解析5线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://120241400.com/app/lele/youhou/jx6.html?url=">解析6线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://120241400.com/app/lele/youhou/jx7.html?url=">解析7线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://120241400.com/app/lele/youhou/jx8.html?url=">解析8线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://120241400.com/app/lele/youhou/jx9.html?url=">解析9线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://120241400.com/app/lele/youhou/jx10.html?url=">解析10线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://120241400.com/app/lele/youhou/jx11.html?url=">解析11线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://120241400.com/app/lele/youhou/jx12.html?url=">解析12线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://h5.freejson.xyz/player/?url=">解析13线</a>
+                <a class="btn btn-blue jiexi" href="javascript:void(0)" data-url="https://z2.m1907.top:404/?eps=0&jx=">解析14线</a>
+            </div>
+        </div>
+        <!-- 切换线路按钮 -->
+        <p class="slide" id="XianLu">切换线路</p>
+    </div>
+
+    <!-- 中间播放器区域 -->
+    <div class="player-area" id="playerArea">
+        <iframe id="jiexi" scrolling="no" allowtransparency="true" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <!-- 底部区域（与顶部同高） -->
+    <div class="bottom-area"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function getQuery(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split("=");
+                    if (pair[0] === variable) {
+                        return decodeURIComponent(pair[1] || "");
+                    }
+                }
+                return "";
+            }
+
+            var url = getQuery("url");
+            var jiexi = document.getElementById("jiexi");
+            var playerArea = document.getElementById("playerArea");
+            var panel = document.getElementById("panel");
+            var xianLuBtn = document.getElementById("XianLu");
+            var closeBtn = document.getElementById("Close");
+            var jiexiBtns = document.querySelectorAll(".jiexi");
+
+            if (!url) {
+                playerArea.innerHTML = '<div class="empty-tip"><div><h1>请填入视频URL地址</h1><p>在地址栏添加 ?url=视频链接 即可解析</p></div></div>';
+            } else {
+                jiexi.src = "https://jx.xmflv.com/?url=" + encodeURIComponent(url);
+            }
+
+            // 切换线路：CSS class 控制展开/收起，自然挤压播放器
+            xianLuBtn.addEventListener("click", function() {
+                panel.classList.add("open");
+                xianLuBtn.classList.add("hide");
+            });
+
+            closeBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                panel.classList.remove("open");
+                xianLuBtn.classList.remove("hide");
+            });
+
+            jiexiBtns.forEach(function(btn) {
+                btn.addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    if (url) {
+                        var jxUrl = this.getAttribute("data-url");
+                        jiexi.src = jxUrl + encodeURIComponent(url);
+                    }
+
+                    jiexiBtns.forEach(function(b) { b.classList.remove("active"); });
+                    this.classList.add("active");
+
+                    // 收起面板，播放器自动回到原位置
+                    panel.classList.remove("open");
+                    xianLuBtn.classList.remove("hide");
+                });
+            });
+
+            document.oncontextmenu = function() { return false; };
+        });
+    </script>
+</body>
+</html>
